@@ -37,7 +37,7 @@ databaseChangeLog:
                   name: description
                   type: varchar(255)
               - column:
-                  name: coverImage
+                  name: cover_image
                   type: varchar(255)
               - column:
                   name: is_deleted
