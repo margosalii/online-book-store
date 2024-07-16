@@ -1,4 +1,7 @@
 package mate.academy.store.dto;
 
-public record BookSearchParameters(String[] authors, String[] titles) {
+import jakarta.validation.constraints.NotEmpty;
+
+public record BookSearchParameters(@NotEmpty String[] authors,
+                                   @NotEmpty String[] titles) {
 }

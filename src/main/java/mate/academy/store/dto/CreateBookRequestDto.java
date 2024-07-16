@@ -2,6 +2,7 @@ package mate.academy.store.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import lombok.Getter;
@@ -12,10 +13,10 @@ import mate.academy.store.validation.Isbn;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateBookRequestDto {
-    @NotNull
+    @NotBlank
     private String title;
 
-    @NotNull
+    @NotBlank
     private String author;
 
     @Isbn
