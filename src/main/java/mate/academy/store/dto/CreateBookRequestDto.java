@@ -1,9 +1,9 @@
 package mate.academy.store.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,9 +23,11 @@ public class CreateBookRequestDto {
     private String isbn;
 
     @NotNull
-    @Min(0)
+    @Positive
     private BigDecimal price;
 
+    @NotBlank
     private String description;
+
     private String coverImage;
 }
