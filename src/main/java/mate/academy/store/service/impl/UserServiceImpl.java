@@ -1,5 +1,6 @@
 package mate.academy.store.service.impl;
 
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.store.dto.UserRegistrationRequestDto;
 import mate.academy.store.dto.UserResponseDto;
@@ -30,13 +31,9 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationException("Can't register new user with email: "
                 + requestDto.getEmail());
         }
-        User user = new User();
-        user.setEmail(requestDto.getEmail());
+        User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        user.setFirstName(requestDto.getFirstName());
-        user.setLastName(requestDto.getLastName());
-        user.setShippingAddress(requestDto.getShippingAddress());
-        user.getRoles().add(roleRepository.findByName(RoleName.USER));
+        user.setRoles(Set.of(roleRepository.findByName(RoleName.USER)));
         userRepository.save(user);
         return userMapper.toResponseDto(user);
     }
