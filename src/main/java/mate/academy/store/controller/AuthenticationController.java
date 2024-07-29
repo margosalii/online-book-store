@@ -1,5 +1,6 @@
 package mate.academy.store.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.store.dto.UserLoginRequestDto;
 import mate.academy.store.dto.UserLoginResponseDto;
@@ -21,13 +22,13 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/registration")
-    public UserResponseDto register(@RequestBody UserRegistrationRequestDto requestDto)
+    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         return userService.register(requestDto);
     }
 
     @PostMapping("/login")
-    public UserLoginResponseDto login(@RequestBody UserLoginRequestDto request) {
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto request) {
         return authenticationService.authenticate(request);
     }
 }
