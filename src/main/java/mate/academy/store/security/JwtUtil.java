@@ -1,7 +1,6 @@
 package mate.academy.store.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -34,14 +33,10 @@ public class JwtUtil {
 
     public boolean isValidToken(String token) {
         try {
-            Jws<Claims> claimsJws = Jwts.parser()
-                    .verifyWith(secret)
-                    .build()
-                    .parseSignedClaims(token);
-
-            return !claimsJws.getPayload().getExpiration().before(new Date());
+            return token != null && !getClaimFromToken(token, Claims::getExpiration)
+                .before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtException("JWT token is invalid");
+            throw new JwtException("Expired or invalid JWT token", e);
         }
     }
 

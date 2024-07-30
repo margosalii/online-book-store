@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import mate.academy.store.validation.Email;
 
 public record UserLoginRequestDto(
-        @Email
         @NotBlank
+        @Email
         String email,
         @NotBlank
         String password) {
