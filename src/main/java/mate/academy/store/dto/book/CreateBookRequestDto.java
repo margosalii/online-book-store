@@ -1,10 +1,11 @@
-package mate.academy.store.dto;
+package mate.academy.store.dto.book;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import mate.academy.store.validation.Isbn;
@@ -30,4 +31,6 @@ public class CreateBookRequestDto {
     private String description;
 
     private String coverImage;
+
+    private Set<Long> categoryIds;
 }

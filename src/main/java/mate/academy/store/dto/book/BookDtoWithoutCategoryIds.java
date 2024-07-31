@@ -1,12 +1,12 @@
-package mate.academy.store.dto;
+package mate.academy.store.dto.book;
 
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-public class BookDto {
+@Getter
+public class BookDtoWithoutCategoryIds {
     private Long id;
     private String title;
     private String author;

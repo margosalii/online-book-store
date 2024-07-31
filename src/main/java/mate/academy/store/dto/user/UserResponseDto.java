@@ -1,4 +1,4 @@
-package mate.academy.store.dto;
+package mate.academy.store.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;
