@@ -12,7 +12,6 @@ import mate.academy.store.dto.order.UpdateOrderRequestDto;
 import mate.academy.store.dto.orderitem.OrderItemDto;
 import mate.academy.store.model.User;
 import mate.academy.store.service.order.OrderService;
-import mate.academy.store.service.orderitem.OrderItemService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Validated
 public class OrderController {
-    private final OrderItemService orderItemService;
     private final OrderService orderService;
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -66,13 +64,13 @@ public class OrderController {
     @Operation(summary = "Get order item", description = "Get order item by its ID and orders ID")
     public OrderItemDto getItemByOrderAndItemId(@PathVariable @Positive Long orderId,
                                        @PathVariable @Positive Long itemId) {
-        return orderItemService.getItemByOrderIdAndItemId(orderId, itemId);
+        return orderService.getItemByOrderIdAndItemId(orderId, itemId);
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/{orderId}/items")
     @Operation(summary = "Get order items", description = "Get order items by orders ID")
     public Set<OrderItemDto> getAllItemsByOrderId(@PathVariable @Positive Long orderId) {
-        return orderItemService.getItemsByOrderId(orderId);
+        return orderService.getItemsByOrderId(orderId);
     }
 }

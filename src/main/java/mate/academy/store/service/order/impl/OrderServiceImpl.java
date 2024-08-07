@@ -10,18 +10,20 @@ import lombok.RequiredArgsConstructor;
 import mate.academy.store.dto.order.RequestOrderDto;
 import mate.academy.store.dto.order.ResponseOrderDto;
 import mate.academy.store.dto.order.UpdateOrderRequestDto;
+import mate.academy.store.dto.orderitem.OrderItemDto;
+import mate.academy.store.mapper.OrderItemMapper;
 import mate.academy.store.mapper.OrderMapper;
 import mate.academy.store.model.CartItem;
 import mate.academy.store.model.Order;
 import mate.academy.store.model.OrderItem;
 import mate.academy.store.model.ShoppingCart;
 import mate.academy.store.model.Status;
-import mate.academy.store.repository.cart.item.CartItemRepository;
 import mate.academy.store.repository.order.OrderRepository;
+import mate.academy.store.repository.orderitem.OrderItemRepository;
 import mate.academy.store.repository.shopping.cart.ShoppingCartRepository;
 import mate.academy.store.service.order.OrderService;
-import mate.academy.store.service.orderitem.OrderItemService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +31,11 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final ShoppingCartRepository shoppingCartRepository;
-    private final OrderItemService orderItemService;
-    private final CartItemRepository cartItemRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final OrderItemMapper orderItemMapper;
 
     @Override
+    @Transactional
     public ResponseOrderDto placeNewOrder(Long userId, RequestOrderDto requestOrderDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(
                 () -> new EntityNotFoundException("Can't find users shopping cart by user id: "
@@ -48,10 +51,12 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setStatus(Status.PENDING);
 
+        shoppingCart.clearCart();
+        shoppingCartRepository.save(shoppingCart);
+
         Order savedOrder = orderRepository.save(order);
 
-        orderItems.forEach(orderItemService::save);
-        clearShoppingCart(shoppingCart);
+        orderItems.forEach(this::saveOrderItem);
         return orderMapper.toDto(savedOrder);
     }
 
@@ -64,11 +69,36 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public ResponseOrderDto updateOrderStatus(Long id, UpdateOrderRequestDto requestDto) {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find order by id: " + id));
         orderMapper.updateOrderFromDto(requestDto, order);
         return orderMapper.toDto(orderRepository.save(order));
+    }
+
+    @Override
+    public OrderItemDto getItemByOrderIdAndItemId(Long orderId, Long id) {
+        OrderItem orderItem = orderItemRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find item by id: " + id));
+
+        if (orderItem.getOrder().getId().equals(orderId)) {
+            return orderItemMapper.toDto(orderItem);
+        }
+        throw new EntityNotFoundException("Can't find item by order id: " + orderId);
+    }
+
+    @Override
+    public Set<OrderItemDto> getItemsByOrderId(Long id) {
+        return orderItemRepository.findAllByOrderId(id)
+            .stream()
+            .map(orderItemMapper::toDto)
+            .collect(Collectors.toSet());
+    }
+
+    @Transactional
+    private void saveOrderItem(OrderItem orderItem) {
+        orderItemRepository.save(orderItem);
     }
 
     private Set<OrderItem> createSetOfOrderItems(Order order, ShoppingCart shoppingCart) {
@@ -92,10 +122,4 @@ public class OrderServiceImpl implements OrderService {
         }
         return total;
     }
-
-    private void clearShoppingCart(ShoppingCart shoppingCart) {
-        shoppingCart.getCartItems().clear();
-        shoppingCartRepository.save(shoppingCart);
-    }
-
 }

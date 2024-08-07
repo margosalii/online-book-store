@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(config = MapperConfig.class, uses = OrderItemMapper.class)
 public interface OrderMapper {
     Order toModel(ResponseOrderDto responseOrderDto);
 
