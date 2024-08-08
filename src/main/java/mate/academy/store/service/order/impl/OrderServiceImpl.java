@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
-        orderItems.forEach(this::saveOrderItem);
+        orderItems.forEach(orderItemRepository::save);
         return orderMapper.toDto(savedOrder);
     }
 
@@ -94,11 +94,6 @@ public class OrderServiceImpl implements OrderService {
             .stream()
             .map(orderItemMapper::toDto)
             .collect(Collectors.toSet());
-    }
-
-    @Transactional
-    private void saveOrderItem(OrderItem orderItem) {
-        orderItemRepository.save(orderItem);
     }
 
     private Set<OrderItem> createSetOfOrderItems(Order order, ShoppingCart shoppingCart) {
