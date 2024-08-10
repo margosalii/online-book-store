@@ -4,8 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import mate.academy.store.dto.order.RequestOrderDto;
 import mate.academy.store.dto.order.ResponseOrderDto;
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
         Set<OrderItem> orderItems = createSetOfOrderItems(order, shoppingCart);
 
         order.setOrderItems(orderItems);
-        order.setTotal(countTotal(orderItems));
+        order.setTotal(calculateTotal(orderItems));
         order.setShippingAddress(requestOrderDto.getShippingAddress());
         order.setUser(shoppingCart.getUser());
         order.setOrderDate(LocalDateTime.now());
@@ -61,11 +61,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Set<ResponseOrderDto> getAllUsersOrders(Long userId) {
+    public List<ResponseOrderDto> getAllUsersOrders(Long userId) {
         return orderRepository.findAllByUserId(userId)
             .stream()
             .map(orderMapper::toDto)
-            .collect(Collectors.toSet());
+            .toList();
     }
 
     @Override
@@ -79,21 +79,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderItemDto getItemByOrderIdAndItemId(Long orderId, Long id) {
-        OrderItem orderItem = orderItemRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can't find item by id: " + id));
-
-        if (orderItem.getOrder().getId().equals(orderId)) {
-            return orderItemMapper.toDto(orderItem);
-        }
-        throw new EntityNotFoundException("Can't find item by order id: " + orderId);
+        return orderItemMapper
+            .toDto(orderItemRepository.findByOrderIdAndId(orderId, id).orElseThrow(
+                () -> new EntityNotFoundException(String.format(
+                    "Can't find order item by order id: %s and item id: %s", orderId, id))));
     }
 
     @Override
-    public Set<OrderItemDto> getItemsByOrderId(Long id) {
+    public List<OrderItemDto> getItemsByOrderId(Long id) {
         return orderItemRepository.findAllByOrderId(id)
             .stream()
             .map(orderItemMapper::toDto)
-            .collect(Collectors.toSet());
+            .toList();
     }
 
     private Set<OrderItem> createSetOfOrderItems(Order order, ShoppingCart shoppingCart) {
@@ -110,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
         return orderItems;
     }
 
-    private BigDecimal countTotal(Set<OrderItem> orderItems) {
+    private BigDecimal calculateTotal(Set<OrderItem> orderItems) {
         BigDecimal total = BigDecimal.valueOf(0);
         for (OrderItem orderItem : orderItems) {
             total = total.add(orderItem.getPrice());

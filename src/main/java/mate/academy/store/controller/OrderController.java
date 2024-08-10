@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import java.util.Set;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.store.dto.order.RequestOrderDto;
 import mate.academy.store.dto.order.ResponseOrderDto;
@@ -53,7 +53,7 @@ public class OrderController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Get all orders", description = "Get all users orders")
-    public Set<ResponseOrderDto> getAllOrders() {
+    public List<ResponseOrderDto> getAllOrders() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long id = ((User) authentication.getPrincipal()).getId();
         return orderService.getAllUsersOrders(id);
@@ -70,7 +70,7 @@ public class OrderController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/{orderId}/items")
     @Operation(summary = "Get order items", description = "Get order items by orders ID")
-    public Set<OrderItemDto> getAllItemsByOrderId(@PathVariable @Positive Long orderId) {
+    public List<OrderItemDto> getAllItemsByOrderId(@PathVariable @Positive Long orderId) {
         return orderService.getItemsByOrderId(orderId);
     }
 }
