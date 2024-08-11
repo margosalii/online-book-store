@@ -2,7 +2,6 @@ package mate.academy.store.service.order.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,6 @@ import mate.academy.store.model.CartItem;
 import mate.academy.store.model.Order;
 import mate.academy.store.model.OrderItem;
 import mate.academy.store.model.ShoppingCart;
-import mate.academy.store.model.Status;
 import mate.academy.store.repository.order.OrderRepository;
 import mate.academy.store.repository.orderitem.OrderItemRepository;
 import mate.academy.store.repository.shopping.cart.ShoppingCartRepository;
@@ -48,8 +46,6 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(calculateTotal(orderItems));
         order.setShippingAddress(requestOrderDto.getShippingAddress());
         order.setUser(shoppingCart.getUser());
-        order.setOrderDate(LocalDateTime.now());
-        order.setStatus(Status.PENDING);
 
         shoppingCart.clearCart();
         shoppingCartRepository.save(shoppingCart);
@@ -69,7 +65,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
     public ResponseOrderDto updateOrderStatus(Long id, UpdateOrderRequestDto requestDto) {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find order by id: " + id));
