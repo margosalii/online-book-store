@@ -1,0 +1,1 @@
+insert into categories (id, name) values (1, 'Fantasy'), (2, 'Adventure');
