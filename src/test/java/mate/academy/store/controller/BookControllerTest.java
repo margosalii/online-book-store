@@ -35,8 +35,13 @@ import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BookControllerTest {
-    protected static MockMvc mockMvc;
+    private static MockMvc mockMvc;
     private static List<BookDto> bookDtos;
+    private static final String DTO_TITLE = "Kobzar";
+    private static final String DTO_AUTHOR = "Shevchenko";
+    private static final String DTO_DESCRIPTION = "Kobzar by Shevchenko";
+    private static final String DTO_ISBN = "9780141321002";
+    private static final BigDecimal DTO_PRICE = BigDecimal.valueOf(16);
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -56,12 +61,22 @@ class BookControllerTest {
 
     private static void generateBookDtos() {
         bookDtos = new ArrayList<>();
-        bookDtos.add(new BookDto().setId(1L).setTitle("Harry Potter")
-                .setAuthor("J.K. Rowling").setIsbn("9780747532699")
-                .setPrice(BigDecimal.valueOf(11)).setCategoryIds(Collections.emptySet()));
-        bookDtos.add(new BookDto().setId(2L).setTitle("Treasure Island")
-                .setAuthor("Robert Louis Stevenson").setIsbn("9780141321004")
-                .setPrice(BigDecimal.valueOf(8)).setCategoryIds(Collections.emptySet()));
+        bookDtos.add(
+            new BookDto()
+                .setId(1L)
+                .setTitle("Harry Potter")
+                .setAuthor("J.K. Rowling")
+                .setIsbn("9780747532699")
+                .setPrice(BigDecimal.valueOf(11))
+                .setCategoryIds(Collections.emptySet()));
+        bookDtos.add(
+            new BookDto()
+                .setId(2L)
+                .setTitle("Treasure Island")
+                .setAuthor("Robert Louis Stevenson")
+                .setIsbn("9780141321004")
+                .setPrice(BigDecimal.valueOf(8))
+                .setCategoryIds(Collections.emptySet()));
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -73,11 +88,11 @@ class BookControllerTest {
     @DisplayName("Create a new book")
     void createBook_validRequestDto_Ok() throws Exception {
         CreateBookRequestDto requestDto = new CreateBookRequestDto();
-        requestDto.setAuthor("Shevchenko");
-        requestDto.setTitle("Kobzar");
-        requestDto.setDescription("Kobzar by Shevchenko");
-        requestDto.setPrice(BigDecimal.valueOf(16));
-        requestDto.setIsbn("9780141321002");
+        requestDto.setAuthor(DTO_AUTHOR);
+        requestDto.setTitle(DTO_TITLE);
+        requestDto.setDescription(DTO_DESCRIPTION);
+        requestDto.setPrice(DTO_PRICE);
+        requestDto.setIsbn(DTO_ISBN);
 
         BookDto expected = new BookDto()
                 .setTitle(requestDto.getTitle())
@@ -129,7 +144,7 @@ class BookControllerTest {
                 .getContentAsByteArray(), BookDto[].class);
 
         Assertions.assertEquals(2, actual.length);
-        Assertions.assertEquals(expected, Arrays.stream(actual).toList());
+        Assertions.assertEquals(expected, Arrays.asList(actual));
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -171,11 +186,11 @@ class BookControllerTest {
     @DisplayName("Update book by ID")
     void updateBook_validIdAndRequestDto_Ok() throws Exception {
         CreateBookRequestDto requestDto = new CreateBookRequestDto();
-        requestDto.setAuthor("Shevchenko");
-        requestDto.setTitle("Kobzar");
-        requestDto.setDescription("Kobzar by Shenchenko");
-        requestDto.setPrice(BigDecimal.valueOf(16));
-        requestDto.setIsbn("9780141321002");
+        requestDto.setAuthor(DTO_AUTHOR);
+        requestDto.setTitle(DTO_TITLE);
+        requestDto.setDescription(DTO_DESCRIPTION);
+        requestDto.setPrice(DTO_PRICE);
+        requestDto.setIsbn(DTO_ISBN);
 
         BookDto expected = new BookDto()
                 .setTitle(requestDto.getTitle())

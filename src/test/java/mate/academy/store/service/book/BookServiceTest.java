@@ -46,14 +46,14 @@ class BookServiceTest {
     @Mock
     private BookRepository bookRepository;
 
-    @InjectMocks
-    private BookServiceImpl bookService;
-
     @Mock
     private BookMapper bookMapper;
 
     @Mock
     private BookSpecificationBuilder specificationBuilder;
+
+    @InjectMocks
+    private BookServiceImpl bookService;
 
     @BeforeAll
     static void setUp() {
