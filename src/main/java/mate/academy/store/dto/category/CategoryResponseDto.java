@@ -1,10 +1,10 @@
 package mate.academy.store.dto.category;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
-@Getter
-@Setter
+@Data
+@Accessors(chain = true)
 public class CategoryResponseDto {
     private Long id;
     private String name;
