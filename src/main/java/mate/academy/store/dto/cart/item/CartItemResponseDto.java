@@ -1,10 +1,8 @@
 package mate.academy.store.dto.cart.item;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class CartItemResponseDto {
     private Long id;
     private Long bookId;

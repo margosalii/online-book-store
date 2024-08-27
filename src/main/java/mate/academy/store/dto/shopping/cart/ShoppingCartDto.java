@@ -1,12 +1,10 @@
 package mate.academy.store.dto.shopping.cart;
 
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import mate.academy.store.dto.cart.item.CartItemResponseDto;
 
-@Getter
-@Setter
+@Data
 public class ShoppingCartDto {
     private Long id;
     private Long userId;
