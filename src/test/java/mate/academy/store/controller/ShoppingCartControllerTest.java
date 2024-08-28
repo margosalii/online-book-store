@@ -22,7 +22,6 @@ import mate.academy.store.model.Role;
 import mate.academy.store.model.RoleName;
 import mate.academy.store.model.ShoppingCart;
 import mate.academy.store.model.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -151,7 +150,7 @@ class ShoppingCartControllerTest {
         ShoppingCartDto actual = objectMapper
                 .readValue(result.getResponse().getContentAsString(), ShoppingCartDto.class);
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
