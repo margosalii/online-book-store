@@ -1,6 +1,8 @@
 package mate.academy.store.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,6 +41,26 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+@Sql(
+    scripts = {
+        "classpath:database/categories/add-some-categories-to-table.sql",
+        "classpath:database/books/add-some-books-to-table.sql",
+        "classpath:database/categories/add-values-into-books-categories-table.sql",
+        "classpath:database/shopping.carts/add-shopping-cart-to-table.sql",
+        "classpath:database/cart.items/add-cart-item.sql"
+    },
+    executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+)
+@Sql(
+    scripts = {
+        "classpath:database/cart.items/delete-cart-item.sql",
+        "classpath:database/shopping.carts/delete-shopping-cart.sql",
+        "classpath:database/categories/delete-categories-and-book-categories.sql",
+        "classpath:database/categories/delete-categories.sql",
+        "classpath:database/books/delete-books.sql"
+    },
+    executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ShoppingCartControllerTest {
     public static final Long ID = 1L;
@@ -117,26 +139,6 @@ class ShoppingCartControllerTest {
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
-    @Sql(
-            scripts = {
-                "classpath:database/categories/add-some-categories-to-table.sql",
-                "classpath:database/books/add-some-books-to-table.sql",
-                "classpath:database/categories/add-values-into-books-categories-table.sql",
-                "classpath:database/shopping.carts/add-shopping-cart-to-table.sql",
-                "classpath:database/cart.items/add-cart-item.sql"
-            },
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(
-            scripts = {
-                "classpath:database/cart.items/delete-cart-item.sql",
-                "classpath:database/shopping.carts/delete-shopping-cart.sql",
-                "classpath:database/categories/delete-categories-and-book-categories.sql",
-                "classpath:database/categories/delete-categories.sql",
-                "classpath:database/books/delete-books.sql"
-            },
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
-    )
     @DisplayName("Get shopping cart by ID")
     void getShoppingCartById_Ok() throws Exception {
         ShoppingCartDto expected = shoppingCartDto;
@@ -155,26 +157,6 @@ class ShoppingCartControllerTest {
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
-    @Sql(
-            scripts = {
-                "classpath:database/categories/add-some-categories-to-table.sql",
-                "classpath:database/books/add-some-books-to-table.sql",
-                "classpath:database/categories/add-values-into-books-categories-table.sql",
-                "classpath:database/shopping.carts/add-shopping-cart-to-table.sql",
-                "classpath:database/cart.items/add-cart-item.sql"
-            },
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(
-            scripts = {
-                "classpath:database/cart.items/delete-cart-item.sql",
-                "classpath:database/shopping.carts/delete-shopping-cart.sql",
-                "classpath:database/categories/delete-categories-and-book-categories.sql",
-                "classpath:database/categories/delete-categories.sql",
-                "classpath:database/books/delete-books.sql"
-            },
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
-    )
     void addBookToTheCart_validRequest_Ok() throws Exception {
         CartItemDto cartItemDto = new CartItemDto();
         cartItemDto.setBookId(ID);
@@ -203,26 +185,6 @@ class ShoppingCartControllerTest {
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
-    @Sql(
-            scripts = {
-                "classpath:database/categories/add-some-categories-to-table.sql",
-                "classpath:database/books/add-some-books-to-table.sql",
-                "classpath:database/categories/add-values-into-books-categories-table.sql",
-                "classpath:database/shopping.carts/add-shopping-cart-to-table.sql",
-                "classpath:database/cart.items/add-cart-item.sql"
-            },
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(
-            scripts = {
-                "classpath:database/cart.items/delete-cart-item.sql",
-                "classpath:database/shopping.carts/delete-shopping-cart.sql",
-                "classpath:database/categories/delete-categories-and-book-categories.sql",
-                "classpath:database/categories/delete-categories.sql",
-                "classpath:database/books/delete-books.sql"
-            },
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
-    )
     void updateCartItemById_validRequest_Ok() throws Exception {
         UpdateCartItemRequestDto updRequestDto = new UpdateCartItemRequestDto();
         updRequestDto.setQuantity(5);
@@ -247,26 +209,6 @@ class ShoppingCartControllerTest {
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
-    @Sql(
-            scripts = {
-                "classpath:database/categories/add-some-categories-to-table.sql",
-                "classpath:database/books/add-some-books-to-table.sql",
-                "classpath:database/categories/add-values-into-books-categories-table.sql",
-                "classpath:database/shopping.carts/add-shopping-cart-to-table.sql",
-                "classpath:database/cart.items/add-cart-item.sql"
-            },
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(
-            scripts = {
-                "classpath:database/cart.items/delete-cart-item.sql",
-                "classpath:database/shopping.carts/delete-shopping-cart.sql",
-                "classpath:database/categories/delete-categories-and-book-categories.sql",
-                "classpath:database/categories/delete-categories.sql",
-                "classpath:database/books/delete-books.sql"
-            },
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
-    )
     void deleteCartItemById_Ok() throws Exception {
         mockMvc.perform(
                 delete("/cart/items/1"))

@@ -148,7 +148,6 @@ class ShoppingCartServiceTest {
     void getShoppingCart_byInvalidId_ExceptionOk() {
         when(shoppingCartRepository.findByUserId(anyLong())).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> shoppingCartService.getShoppingCart(ID));
-
     }
 
     @Test
