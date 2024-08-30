@@ -1,8 +1,6 @@
 package mate.academy.store.controller;
 
-import jakarta.persistence.EntityNotFoundException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,24 +40,24 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @Sql(
-    scripts = {
-        "classpath:database/categories/add-some-categories-to-table.sql",
-        "classpath:database/books/add-some-books-to-table.sql",
-        "classpath:database/categories/add-values-into-books-categories-table.sql",
-        "classpath:database/shopping.carts/add-shopping-cart-to-table.sql",
-        "classpath:database/cart.items/add-cart-item.sql"
-    },
-    executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+        scripts = {
+            "classpath:database/categories/add-some-categories-to-table.sql",
+            "classpath:database/books/add-some-books-to-table.sql",
+            "classpath:database/categories/add-values-into-books-categories-table.sql",
+            "classpath:database/shopping.carts/add-shopping-cart-to-table.sql",
+            "classpath:database/cart.items/add-cart-item.sql"
+        },
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
 )
 @Sql(
-    scripts = {
-        "classpath:database/cart.items/delete-cart-item.sql",
-        "classpath:database/shopping.carts/delete-shopping-cart.sql",
-        "classpath:database/categories/delete-categories-and-book-categories.sql",
-        "classpath:database/categories/delete-categories.sql",
-        "classpath:database/books/delete-books.sql"
-    },
-    executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+        scripts = {
+            "classpath:database/cart.items/delete-cart-item.sql",
+            "classpath:database/shopping.carts/delete-shopping-cart.sql",
+            "classpath:database/categories/delete-categories-and-book-categories.sql",
+            "classpath:database/categories/delete-categories.sql",
+            "classpath:database/books/delete-books.sql"
+        },
+        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ShoppingCartControllerTest {
