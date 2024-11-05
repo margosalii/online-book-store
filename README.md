@@ -103,5 +103,4 @@ It provides high performance, reliability, and scalability.
 If you want to see and test how correctly send requests to Online Book Store, 
 [there](https://go.postman.co/workspace/d2b993a8-5808-4b3d-8c48-a458643da804) are collection of requests that you can inspect using Postman.
 
-## This project was deployed on AWS. Therefore, everyone can test it [here](http://ec2-54-172-194-197.compute-1.amazonaws.com/swagger-ui/index.html#/).
 
